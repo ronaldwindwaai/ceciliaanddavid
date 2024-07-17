@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wedding Program</title>
+    <title>Cecilia and David - Wedding Program</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,22 +26,22 @@
             border: 1px solid #ccc;
         }
     </style>
-    <link rel="stylesheet" href="path/to/turn.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.css">
 </head>
 <body>
     <div id="flipbook">
         <div class="page">Loading PDF...</div>
     </div>
 
-    <script src="./pdf/pdf.js"></script>
-    <script src="./pdf/pdf.worker.js"></script>
-    <script src="./js/turn.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
     <script>
-        const url = './wedding-program.pdf'; // Path to your PDF
+        const url = 'path/to/your/wedding-program.pdf'; // Path to your PDF
 
         const flipbook = document.getElementById('flipbook');
 
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'path/to/pdf.worker.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
 
         pdfjsLib.getDocument(url).promise.then(function(pdf) {
             const total_pages = pdf.numPages;
