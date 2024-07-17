@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Program</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+        }
+        #flipbook {
+            width: 800px;
+            height: 600px;
+        }
+        .page {
+            width: 400px;
+            height: 600px;
+            background-color: white;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <link rel="stylesheet" href="path/to/turn.min.css">
+</head>
+<body>
+    <div id="flipbook">
+        <div class="page">Loading PDF...</div>
+    </div>
+
+    <script src="./pdf/pdf.js"></script>
+    <script src="./pdf/pdf.worker.js"></script>
+    <script src="./js/turn.min.js"></script>
+    <script>
+        const url = './wedding-program.pdf'; // Path to your PDF
+
+        const flipbook = document.getElementById('flipbook');
+
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'path/to/pdf.worker.js';
+
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            const total_pages = pdf.numPages;
+
+            flipbook.innerHTML = '';
+            for (let pageNum = 1; pageNum <= total_pages; pageNum++) {
+                const pageDiv = document.createElement('div');
+                pageDiv.className = 'page';
+                pageDiv.id = 'page_' + pageNum;
+                flipbook.appendChild(pageDiv);
+            }
+
+            pdf.getPage(1).then(renderPage);
+
+            function renderPage(page) {
+                const viewport = page.getViewport({scale: 1.5});
+                const canvas = document.createElement('canvas');
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                page.render({
+                    canvasContext: canvas.getContext('2d'),
+                    viewport: viewport
+                }).promise.then(() => {
+                    document.getElementById('page_' + page.pageNumber).appendChild(canvas);
+                    if (page.pageNumber < pdf.numPages) {
+                        pdf.getPage(page.pageNumber + 1).then(renderPage);
+                    }
+                });
+            }
+
+            $('#flipbook').turn({
+                width: 800,
+                height: 600,
+                autoCenter: true
+            });
+        });
+    </script>
+</body>
+</html>
